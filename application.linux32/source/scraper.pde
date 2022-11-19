@@ -7,7 +7,6 @@ void scrape() {
   if (observer.hasStrips) {
     registry.startPushing();
     List<Strip> strips = registry.getStrips();
-    boolean phase = false;
     // for every strip:
     int currentStrip = 0;
     int xscale = 16;
@@ -33,7 +32,9 @@ void scrape() {
         int xpos = stripx/16 + xscale*currentStrip;
         boolean odd = xpos % 2 == 1;
         int ypos = odd ? 16-stripx%16 : stripx%16;
-        strip.setPixel(get(xpos, ypos), stripx);
+        color c = get(xpos, ypos);
+        color corrected = color(blue(c)/2, green(c)/2, red(c)/2);
+        strip.setPixel(corrected, stripx);
       }
       currentStrip++;
     }

@@ -4,8 +4,6 @@ import processing.event.*;
 import processing.opengl.*; 
 
 import gifAnimation.*; 
-import javax.swing.*; 
-import processing.video.*; 
 import com.heroicrobot.dropbit.registry.*; 
 import com.heroicrobot.dropbit.devices.pixelpusher.Pixel; 
 import com.heroicrobot.dropbit.devices.pixelpusher.Strip; 
@@ -28,14 +26,11 @@ public class PixelpusherGifPlayer extends PApplet {
  *  Play a gif on the 8 16x16 LED panels
  */
 
- 
 
 
 
 
 
-
-Movie myMovie;
 DeviceRegistry registry;
 PusherObserver observer;
 PImage[] images;
@@ -56,7 +51,8 @@ public void setup() {
 }
 
 public void draw() {
-  if(frameCount%10==0) {
+  background(0);
+  if(frameCount%8==0) {
     currentIdx++;
     if(currentIdx == images.length) {
       currentIdx = 0;
@@ -65,7 +61,6 @@ public void draw() {
   image(images[currentIdx], 0, 0);
   scrape();
 }
-
 class PusherObserver implements Observer {
   public boolean hasStrips = false;
   public void update(Observable registry, Object updatedDevice) {
@@ -85,7 +80,6 @@ public void scrape() {
   if (observer.hasStrips) {
     registry.startPushing();
     List<Strip> strips = registry.getStrips();
-    boolean phase = false;
     // for every strip:
     int currentStrip = 0;
     int xscale = 16;
@@ -111,14 +105,15 @@ public void scrape() {
         int xpos = stripx/16 + xscale*currentStrip;
         boolean odd = xpos % 2 == 1;
         int ypos = odd ? 16-stripx%16 : stripx%16;
-        strip.setPixel(get(xpos, ypos), stripx);
+        int c = get(xpos, ypos);
+        int corrected = color(blue(c)/2, green(c)/2, red(c)/2);
+        strip.setPixel(corrected, stripx);
       }
       currentStrip++;
     }
   }
   updatePixels();
 }
-
   public void settings() {  size(120,16);  noSmooth(); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "PixelpusherGifPlayer" };

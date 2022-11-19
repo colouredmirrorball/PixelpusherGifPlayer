@@ -4,14 +4,11 @@ import gifAnimation.*;
  *  Play a gif on the 8 16x16 LED panels
  */
 
-import javax.swing.*; 
-import processing.video.*;
 import com.heroicrobot.dropbit.registry.*;
 import com.heroicrobot.dropbit.devices.pixelpusher.Pixel;
 import com.heroicrobot.dropbit.devices.pixelpusher.Strip;
 import java.util.*;
 
-Movie myMovie;
 DeviceRegistry registry;
 PusherObserver observer;
 PImage[] images;
@@ -32,7 +29,8 @@ void setup() {
 }
 
 void draw() {
-  if(frameCount%10==0) {
+  background(0);
+  if(frameCount%8==0) {
     currentIdx++;
     if(currentIdx == images.length) {
       currentIdx = 0;
